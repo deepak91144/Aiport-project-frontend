@@ -1,0 +1,4 @@
+export const TransactionConstant = {
+  ADD_TRANSACTION: "ADD_TRANSACTION",
+  FETCH_TRANSACTION: "FETCH_TRANSACTION",
+};

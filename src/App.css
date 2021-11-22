@@ -36,3 +36,320 @@
     transform: rotate(360deg);
   }
 }
+/* custom styles */
+body {
+  color: #fff;
+  background: #19aa8d;
+  font-family: "Roboto", sans-serif;
+}
+.form-control {
+  font-size: 15px;
+}
+.form-control,
+.form-control:focus,
+.input-group-text {
+  border-color: #e1e1e1;
+}
+.form-control,
+.btn {
+  border-radius: 3px;
+}
+.signup-form {
+  width: 400px;
+  margin: 0 auto;
+  padding: 30px 0;
+}
+.signup-form form {
+  color: #999;
+  border-radius: 3px;
+  margin-bottom: 15px;
+  background: #fff;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  padding: 30px;
+}
+.signup-form h2 {
+  color: #333;
+  font-weight: bold;
+  margin-top: 0;
+}
+.signup-form hr {
+  margin: 0 -30px 20px;
+}
+.signup-form .form-group {
+  margin-bottom: 20px;
+}
+.signup-form label {
+  font-weight: normal;
+  font-size: 15px;
+}
+.signup-form .form-control {
+  min-height: 38px;
+  box-shadow: none !important;
+}
+.signup-form .input-group-addon {
+  max-width: 42px;
+  text-align: center;
+}
+.signup-form .btn,
+.signup-form .btn:active {
+  font-size: 16px;
+  font-weight: bold;
+  background: #19aa8d !important;
+  border: none;
+  min-width: 140px;
+}
+.signup-form .btn:hover,
+.signup-form .btn:focus {
+  background: #179b81 !important;
+}
+.signup-form a {
+  color: #fff;
+  text-decoration: underline;
+}
+.signup-form a:hover {
+  text-decoration: none;
+}
+.signup-form form a {
+  color: #19aa8d;
+  text-decoration: none;
+}
+.signup-form form a:hover {
+  text-decoration: underline;
+}
+.signup-form .fa {
+  font-size: 21px;
+}
+.signup-form .fa-paper-plane {
+  font-size: 18px;
+}
+.signup-form .fa-check {
+  color: #fff;
+  left: 17px;
+  top: 18px;
+  font-size: 7px;
+  position: absolute;
+}
+
+/* for menu  */
+*,
+:before,
+:after {
+  box-sizing: border-box;
+}
+
+.unstyled {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.unstyled a {
+  text-decoration: none;
+}
+
+.list-inline {
+  overflow: hidden;
+}
+.list-inline li {
+  float: left;
+}
+
+.header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 17.5em;
+  background: #35302d;
+}
+
+.logo {
+  font: 300 2em "Source Sans Pro", Helvetica, Arial, sans-serif;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+.logo a {
+  display: block;
+  padding: 1em 0;
+  color: #dfdbd9;
+  text-decoration: none;
+  transition: 0.15s linear color;
+}
+.logo a:hover {
+  color: #fff;
+}
+.logo a:hover span {
+  color: #df4500;
+}
+.logo span {
+  font-weight: 700;
+  transition: 0.15s linear color;
+}
+
+.main-nav ul {
+  border-top: solid 1px #3c3735;
+}
+.main-nav li {
+  border-bottom: solid 1px #3c3735;
+}
+.main-nav a {
+  padding: 1.1em 0;
+  color: #dfdbd9;
+  font: 400 1.125em "Source Sans Pro", Helvetica, Arial, sans-serif;
+  text-align: center;
+}
+.main-nav a:hover {
+  color: #fff;
+}
+
+.social-links {
+  border-bottom: solid 1px #3c3735;
+}
+.social-links li {
+  width: 25%;
+  border-left: solid 1px #3c3735;
+}
+.social-links li:first-child {
+  border: none;
+}
+.social-links a {
+  display: block;
+  height: 5.5em;
+  text-align: center;
+  color: #3c3735;
+  font: 0.75em/5.5em "Source Sans Pro", Helvetica, Arial, sans-serif;
+}
+.social-links a:hover {
+  color: #dfdbd9;
+}
+
+.list-hover-slide li {
+  position: relative;
+  overflow: hidden;
+}
+.list-hover-slide a {
+  display: block;
+  position: relative;
+  z-index: 1;
+  transition: 0.35s ease color;
+}
+.list-hover-slide a:before {
+  content: "";
+  display: block;
+  z-index: -1;
+  position: absolute;
+  left: -100%;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-right: solid 5px #df4500;
+  background: #3c3735;
+  transition: 0.35s ease left;
+}
+.list-hover-slide a.is-current:before,
+.list-hover-slide a:hover:before {
+  left: 0;
+}
+.navbar-nav .activeMenu {
+  color: #df4500 !important;
+}
+.activeMenu {
+  color: #df4500 !important;
+}
+.signup-container {
+  width: 100%;
+  height: 100vh;
+  background-color: #34568b;
+}
+
+.signin-container {
+  width: 100%;
+  height: 100vh;
+  background-color: #5b5ea6;
+}
+
+/* modal stying */
+.aiportModal {
+  background-color: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  display: flex;
+
+  justify-content: center;
+}
+.modalForm {
+  background-color: #fff;
+  width: 25%;
+  position: relative;
+  top: 20px;
+  height: 55%;
+  left: calc(50%-15%);
+  border-radius: 4%;
+  margin-top: 15px;
+}
+.closeBtn {
+  background-color: red;
+  color: white;
+  text-align: center;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 50%;
+  position: absolute;
+  font-size: 30px;
+  top: -15px;
+  right: -15px;
+  cursor: pointer;
+}
+.formCon {
+  margin: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modalForm h4 {
+  margin-top: 40px;
+}
+.formGroup {
+  width: 50%;
+}
+form select {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  background-color: #fff;
+
+  outline: none;
+}
+form input {
+  padding: 10px;
+  margin-top: 25px;
+  border-radius: 10px;
+}
+form button {
+  margin-top: 30px;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 20px;
+}
+.navbar-nav a {
+  color: white !important;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+form select {
+  width: 60%;
+}
+.input-group-text {
+  margin: 13px;
+}
