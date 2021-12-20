@@ -1,8 +1,9 @@
 import { NavLink } from "react-router-dom";
-import { signout } from "./auth/ApiCalling";
+import { isAuthenticated, signout } from "./auth/ApiCalling";
 import { useHistory } from "react-router";
 import { useDispatch } from "react-redux";
 import { logout } from "../redux/actions/auth/AuthActions";
+import avatar from "./user.png";
 
 const Menu = () => {
   // intiate useHistory object
@@ -20,58 +21,140 @@ const Menu = () => {
   };
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <NavLink exact activeClassName="activeMenu" to="/dashboard">
-          Home
-        </NavLink>
+      <nav className="navbar navbar-expand-lg navbar-dark  fixed-top headerNav">
+        <a className="navbar-brand" href="#">
+          Fuel Transaction System
+        </a>
+
         <button
           className="navbar-toggler"
           type="button"
-          data-toggle="collapse"
-          data-target="#navbarText"
-          aria-controls="navbarText"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasExample"
+          aria-controls="offcanvasExample"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarText">
-          <ul className="navbar-nav mr-auto">
-            <NavLink
-              exact
-              activeClassName="activeMenu"
-              to="/dashboard/airport"
-              className="nav-link"
-            >
-              Airport
-            </NavLink>
 
-            <NavLink
-              exact
-              activeClassName="activeMenu"
-              to="/dashboard/aircraft"
-              className="nav-link"
+        <ul class=" mr-auto   d-flex flex-row-reverse w-100 ">
+          <li
+            class="nav-item dropdown userDropdown"
+            style={{ display: "none" }}
+          >
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
             >
-              Aircraft
-            </NavLink>
-
-            <NavLink
-              exact
-              activeClassName="activeMenu"
-              to="/dashboard/transaction"
-              className="nav-link"
+              <img src={avatar} width="50px" height="50px" />
+            </a>
+            <div
+              class="dropdown-menu dropdown-menu-end  bg-white text-center mr-5"
+              aria-labelledby="navbarDropdown"
             >
-              Transaction
-            </NavLink>
-
-            <li className="nav-item text-center">
+              <h3 className="text-primary">{isAuthenticated().user.name}</h3>
               <button className="btn btn-danger" onClick={logOut}>
                 Logout
               </button>
-            </li>
-          </ul>
-        </div>
+            </div>
+          </li>
+        </ul>
       </nav>
+
+      <div
+        className="offcanvas offcanvas-start sidebarNav "
+        tabindex="-1"
+        id="offcanvasExample"
+        aria-labelledby="offcanvasExampleLabel"
+      >
+        <div className="offcanvas-header d-flex flex-row-reverse w-100">
+          <button
+            type="button"
+            className="btn-close text-reset "
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+          ></button>
+          <div className="d-flex justify-content-center w-100">
+            <img
+              className="flex-center"
+              src={avatar}
+              width="50px"
+              height="50px"
+            />
+          </div>
+        </div>
+
+        <div className="offcanvas-body">
+          <nav className="navbar-dark sidebarMenu">
+            <ul className="navbar-nav mr-auto  text-primary">
+              <li className="text-primary">
+                <NavLink
+                  exact
+                  activeClassName="activeMenu text-success"
+                  to="/dashboard"
+                >
+                  <span>
+                    <i className="fas fa-tachometer "></i>
+                  </span>
+                  <span> Dashboard</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  exact
+                  activeClassName="activeMenu"
+                  to="/dashboard/airport"
+                  className="nav-link"
+                >
+                  <span>
+                    <i class="fas fa-fighter-jet "></i>
+                  </span>
+                  <span> Airport</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  exact
+                  activeClassName="activeMenu"
+                  to="/dashboard/aircraft"
+                  className="nav-link"
+                >
+                  <span>
+                    <i class="fas fa-fighter-jet "></i>
+                  </span>
+                  <span> Aircraft</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  exact
+                  activeClassName="activeMenu"
+                  to="/dashboard/transaction"
+                  className="nav-link"
+                >
+                  <span>
+                    <i class="fas fa-gas-pump "></i>
+                  </span>
+                  <span> Fuel Transaction</span>
+                </NavLink>
+              </li>
+
+              <li className="nav-item text-center">
+                <button
+                  className="btn btn-danger desktopViewLogout"
+                  onClick={logOut}
+                >
+                  Logout
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
     </>
   );
 };

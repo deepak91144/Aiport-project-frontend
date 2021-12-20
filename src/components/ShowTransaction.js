@@ -1,10 +1,30 @@
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useDispatch } from "react-redux";
+import {
+  fetchTransactions,
+  transactionFetchPending,
+} from "../redux/actions/TransactionActions";
+import { isAuthenticated } from "./auth/ApiCalling";
+import { deleteTransaction } from "./CommonApiCalls";
+import { ToastContainer, toast } from "react-toastify";
 const ShowTransaction = ({ data }) => {
+  const dispatch = useDispatch();
+  const { user, token } = isAuthenticated();
+  const deleteTransactionData = async (transactionId) => {
+    dispatch(transactionFetchPending());
+    const response = await deleteTransaction(user._id, token, transactionId);
+
+    toast.success(`transaction deleted `, {
+      position: "top-center",
+      autoClose: 2000,
+    });
+    dispatch(fetchTransactions(user._id, token, "firstFetch", 0, 10));
+  };
   return (
     <>
       <tr>
         <td>{new Date(data.createdAt).toLocaleString()}</td>
         <td>
-          {" "}
           {data.aircraftId !== null ? (
             data.aircraftId.airline
           ) : (
@@ -14,6 +34,13 @@ const ShowTransaction = ({ data }) => {
         <td>{data.quantity}</td>
         <td style={{ textTransform: "uppercase" }}>{data.transactionType}</td>
         <td>{data.airportId ? data.airportId.airportName : ""}</td>
+        <td>
+          <DeleteIcon
+            onClick={() => {
+              deleteTransactionData(data._id);
+            }}
+          />
+        </td>
       </tr>
     </>
   );

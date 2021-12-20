@@ -1,4 +1,3 @@
-import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 const Base = ({
   title = "my title",
   description = "my description",

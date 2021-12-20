@@ -57,9 +57,9 @@ const Signup = () => {
             <div className="form-group">
               <div className="input-group">
                 <div className="input-group-prepend">
-                  <span className="input-group-text">
+                  {/* <span className="input-group-text">
                     <span className="fa fa-user"></span>
-                  </span>
+                  </span> */}
                 </div>
                 <input
                   type="text"
@@ -74,9 +74,9 @@ const Signup = () => {
             <div className="form-group">
               <div className="input-group">
                 <div className="input-group-prepend">
-                  <span className="input-group-text">
+                  {/* <span className="input-group-text">
                     <i className="fa fa-paper-plane"></i>
-                  </span>
+                  </span> */}
                 </div>
                 <input
                   type="email"
@@ -91,9 +91,9 @@ const Signup = () => {
             <div className="form-group">
               <div className="input-group">
                 <div className="input-group-prepend">
-                  <span className="input-group-text">
+                  {/* <span className="input-group-text">
                     <i className="fa fa-lock"></i>
-                  </span>
+                  </span> */}
                 </div>
                 <input
                   type="password"

@@ -6,8 +6,8 @@ const initialState = {
   message: "",
   status: "",
   totalRecord: 0,
-  pMessage: "",
-  pStatus: "",
+
+  pending: false,
 };
 export const AircraftReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -18,9 +18,18 @@ export const AircraftReducer = (state = initialState, { type, payload }) => {
         allAircraft: payload.allAircraft,
         status: payload.status,
         totalRecord: payload.totalRecord,
+        pending: false,
       };
+    case AircraftConstants.FETCH_AIRCRAFT_PENDING:
+      return { ...state, pending: true };
+    case AircraftConstants.TOGGLE_FETCH_AIRCRAFT_PENDING:
+      return { ...state, pending: false };
     case AircraftConstants.ADD_AIRCRAFT:
-      return { ...state, pMessage: payload.pMessage, pStatus: payload.pStatus };
+      return {
+        ...state,
+
+        pending: false,
+      };
     default:
       return state;
   }

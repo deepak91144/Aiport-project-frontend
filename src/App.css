@@ -186,21 +186,15 @@ body {
   transition: 0.15s linear color;
 }
 
-.main-nav ul {
-  border-top: solid 1px #3c3735;
-}
-.main-nav li {
-  border-bottom: solid 1px #3c3735;
-}
-.main-nav a {
+/* .main-nav a {
   padding: 1.1em 0;
   color: #dfdbd9;
   font: 400 1.125em "Source Sans Pro", Helvetica, Arial, sans-serif;
   text-align: center;
-}
-.main-nav a:hover {
+} */
+/* .main-nav a:hover {
   color: #fff;
-}
+} */
 
 .social-links {
   border-bottom: solid 1px #3c3735;
@@ -284,12 +278,13 @@ body {
 .modalForm {
   background-color: #fff;
   width: 25%;
-  position: relative;
+  position: absolute;
   top: 20px;
-  height: 55%;
+  min-height: 100px;
   left: calc(50%-15%);
-  border-radius: 4%;
+  border-radius: 7%;
   margin-top: 15px;
+  border: 4px solid #0d6efd;
 }
 .closeBtn {
   background-color: red;
@@ -310,21 +305,22 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: -20px;
 }
 
 .modalForm h4 {
-  margin-top: 40px;
+  margin-top: 20px;
 }
 .formGroup {
   width: 50%;
 }
 form select {
   padding: 10px;
-  margin: 10px;
+  margin-top: 30px;
   border-radius: 10px;
   background-color: #fff;
-
-  outline: none;
+  width: 80%;
+  border-width: 2px;
 }
 form input {
   padding: 10px;
@@ -347,9 +343,161 @@ form button {
   font-size: 20px;
 }
 
-form select {
-  width: 60%;
-}
 .input-group-text {
   margin: 13px;
+}
+/* .transactionModal {
+  -height: 55% !important;
+} */
+.transactionModal form .formCon input {
+  width: 80 !important;
+}
+
+.card {
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  background-color: #dee2e6 !important;
+}
+
+.card:hover {
+  box-shadow: 0 8px 26px 0 rgba(0, 0, 0, 0.2);
+}
+
+.card-container {
+  padding: 2px 16px;
+}
+@media screen and (max-width: 1325px) {
+  .modalForm select {
+    width: 90%;
+  }
+  .modalForm input {
+    width: 90%;
+  }
+}
+@media screen and (max-width: 1025px) {
+  .modalForm {
+    width: 35%;
+    /* height: 65%; */
+  }
+  .modalForm select {
+    width: 80%;
+  }
+}
+@media (min-width: 900px) and (max-width: 1024px) {
+  nav {
+    width: 120.3%;
+  }
+}
+@media screen and (max-width: 769px) {
+  .modalForm {
+    width: 45%;
+  }
+  .modalForm select {
+    width: 80%;
+  }
+  div.sortBy {
+    margin-top: 20px;
+  }
+}
+
+@media screen and (max-width: 426px) {
+  .modalForm {
+    width: 60%;
+    /* height: 60%; */
+  }
+  .modalForm select {
+    width: 80%;
+  }
+  form .formCon input.qty {
+    width: 90% !important;
+  }
+  div.sortBy {
+    margin-top: 20px;
+  }
+}
+
+@media screen and (max-width: 376px) {
+  .modalForm {
+    width: 60%;
+    /* height: 63%; */
+  }
+  .modalForm select {
+    width: 80%;
+  }
+  form .formCon input.qty {
+    width: 80% !important;
+  }
+  div.sortBy {
+    margin-top: 20px;
+  }
+}
+div.sidebarNav {
+  width: 260px;
+  background-color: #2a6592;
+}
+li a span {
+  color: whitesmoke !important;
+}
+
+@media (min-width: 992px) {
+  div.sidebarNav {
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    /* Set the width of the sidebar */
+    position: fixed !important; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1 !important; /* Stay on top */
+    background-color: #2a6592;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 20px;
+
+    transform: none;
+    visibility: visible;
+    /* top: 56px; */
+    height: calc(100%-56px);
+  }
+  main {
+    margin-left: 275px;
+  }
+  .btn-close {
+    display: none;
+  }
+  .sidebarMenu ul {
+    margin-top: 20px;
+  }
+  .userDropdown {
+    display: inline !important;
+  }
+  .desktopViewLogout {
+    display: none !important;
+  }
+  .secondPart {
+    margin-left: 30px;
+  }
+}
+
+form .formCon input.qty {
+  width: 80% !important;
+}
+.customCard {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+}
+
+/* On mouse-over, add a deeper shadow */
+.customCard:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Add some padding inside the card container */
+.container {
+  padding: 2px 16px;
+}
+.headerNav {
+  /* Set the width of the sidebar */
+  position: sticky !important; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 2 !important; /* Stay on top */
+  background-color: #2a6592;
+}
+.dropdown-menu {
+  position: absolute;
+  left: -75px !important;
 }

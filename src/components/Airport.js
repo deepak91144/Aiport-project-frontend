@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, Suspense, lazy } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { isAuthenticated, signout } from "./auth/ApiCalling";
@@ -6,10 +6,15 @@ import createAirport, { getAllAirports } from "./CommonApiCalls";
 import Menu from "./Menu";
 import "../App.css";
 import ShowAirports from "./ShowAirports";
+
 import { useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AirportConstant } from "../redux/constants/AirportConstants";
-import { addAirportData, fetchAirport } from "../redux/actions/AirportActions";
+import {
+  airportFetchPending,
+  fetchAirport,
+  toggleAirportFetchPending,
+} from "../redux/actions/AirportActions";
 
 const AddAirport = () => {
   //state to toggle modal, modal can be shown value is true else modal remains closed
@@ -20,6 +25,7 @@ const AddAirport = () => {
   const [totalRecord, setTotalRecord] = useState(0);
   //error message sate
   const [errMsg, setErrMsg] = useState("");
+  const [err, setErr] = useState("");
   // initiate useHistory object
   const history = useHistory();
   // state to hold limit value
@@ -36,6 +42,7 @@ const AddAirport = () => {
     fuelCapacity: "",
     fuelAvailable: "",
   });
+  const addBtnRef = useRef();
 
   const { AirportReducer, AircraftReducer } = useSelector((state) => state);
   console.log(AirportReducer);
@@ -45,6 +52,7 @@ const AddAirport = () => {
 
   const addAirport = async (event) => {
     event.preventDefault();
+    dispatch(airportFetchPending());
     // varibale holds userId
     var userId = "";
     // if user doesnt exist make userId to blank else tore user id to userId variable
@@ -63,8 +71,10 @@ const AddAirport = () => {
         history.push("/signin");
       }
       if (response.status === "error") {
+        dispatch(toggleAirportFetchPending());
         toast.error(`${response.message}`, {
           position: "top-center",
+          autoClose: 2000,
         });
       }
       if (response.status === "ok") {
@@ -85,6 +95,18 @@ const AddAirport = () => {
     // destructure name and value from active input box
     const { name, value } = event.target;
     // setting values to input box which is currently active
+    if (name === "fuelAvailable") {
+      if (Number(value) > Number(airportdata.fuelCapacity)) {
+        setErr("fuel Availabe should be less than capacity");
+        addBtnRef.current.disabled = true;
+      }
+      if (Number(value) < Number(airportdata.fuelCapacity)) {
+        addBtnRef.current.disabled = false;
+        setErr("");
+      }
+    } else {
+      setErr("");
+    }
     setAirportdata((preValue) => {
       return { ...preValue, [name]: value };
     });
@@ -110,6 +132,8 @@ const AddAirport = () => {
 
   // function that triggered when user sort record
   const sortBy = async (event) => {
+    dispatch(airportFetchPending());
+
     // fetcing airport according to the sorting text
     // fetchAirports(event.target.value, 1, 3);
     dispatch(fetchAirport(event.target.value, 1, limit));
@@ -143,6 +167,7 @@ const AddAirport = () => {
               <button
                 className="btn btn-danger"
                 onClick={() => {
+                  dispatch(airportFetchPending());
                   // fetchAirports(sortByText, currentPage - 1, 3);
                   dispatch(fetchAirport(sortByText, currentPage - 1, limit));
                   setCurrentPage(currentPage - 1);
@@ -159,9 +184,9 @@ const AddAirport = () => {
                     className="btn btn-primary m-2"
                     onClick={() => {
                       // fetchAirports(sortByText, data, 3);
+                      dispatch(airportFetchPending());
                       dispatch(fetchAirport(sortByText, data, limit));
                       setCurrentPage(data);
-                      console.log(currentPage);
                     }}
                   >
                     {data}
@@ -174,6 +199,7 @@ const AddAirport = () => {
               <button
                 className="btn btn-success"
                 onClick={() => {
+                  dispatch(airportFetchPending());
                   // fetchAirports(sortByText, currentPage + 1, 3);
                   dispatch(fetchAirport(sortByText, currentPage + 1, limit));
                   setCurrentPage(currentPage + 1);
@@ -191,7 +217,7 @@ const AddAirport = () => {
   return (
     <>
       <Menu />
-      <ToastContainer />
+      <ToastContainer autoClose={2000} />
       {modal && (
         <div className="aiportModal" style={{ display: modal }}>
           <div className="modalForm">
@@ -225,12 +251,26 @@ const AddAirport = () => {
                   onChange={handleChange}
                   value={airportdata.fuelAvailable}
                 />
+                <div className="text-danger">{err}</div>
 
-                <div className="form-group">
-                  <button type="submit" className="btn btn-primary btn-lg">
-                    Add Airport
-                  </button>
-                </div>
+                <button
+                  type="submit"
+                  disabled
+                  ref={addBtnRef}
+                  className="btn btn-primary btn-lg"
+                >
+                  Add Airport
+                </button>
+                {AirportReducer.pending && AirportReducer.status !== "error" ? (
+                  <div
+                    className="text-success"
+                    style={{ fontSize: "20px", marginTop: "3px" }}
+                  >
+                    Adding...
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
             </form>
 
@@ -240,69 +280,85 @@ const AddAirport = () => {
           </div>
         </div>
       )}
-
-      <div className="container">
-        <div className="row">
-          <div className="col-md-12  mt-3 text-center">
-            <button className="btn btn-primary text-center" onClick={openModal}>
-              Add Airport
-            </button>
-            <select
-              style={{
-                marginLeft: "30px",
-                padding: "10px",
-                borderColor: "red",
-                borderRadius: "10px",
-                outline: "none",
-              }}
-              name="sort"
-              onChange={sortBy}
-            >
-              <option disabled selected>
-                Sort By
-              </option>
-              <option value="airportNameAsc">Airport IN Accending Order</option>
-              <option value="airportNameDsc">Airport IN Decending Order</option>
-              <option value="recent"> Recent</option>
-              <option value="older"> Older</option>
-              <option value="fuelCapacityAsc">
-                Fuel Capacity In Asccending Order
-              </option>
-              <option value="fuelCapacityDsc">
-                Fuel Capacity In Desccending Order
-              </option>
-              <option value="fuelAvlAsc">
-                Fuel Availability In Assccending Order
-              </option>
-              <option value="fuelAvlDsc">
-                Fuel Availability In Dessccending Order
-              </option>
-            </select>
-          </div>
-          <div className="col-md-12 mt-3">
-            <table className="table table-sm table-responsive ">
-              <thead className="table-dark">
-                <tr>
-                  <th scope="col">Date/Time</th>
-                  <th scope="col">Airport ID</th>
-                  <th scope="col">Airport Name</th>
-                  <th scope="col">Fuel Capacity(in liter)</th>
-                  <th scope="col">Fuel Availabe(in liter)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {AirportReducer.airports.map((data, index) => {
-                  return <ShowAirports data={data} key={index} />;
-                })}
-                {AirportReducer.airports.length < 1 && (
-                  <div>No Airport Found</div>
-                )}
-              </tbody>
-            </table>
-            {Pagination()}
+      <main>
+        <div className="container">
+          <div className="row">
+            <div className="col-md-12  mt-3 text-center">
+              <div className="container">
+                <div className="row">
+                  <div className="col-lg-6 ">
+                    <button className="btn btn-primary " onClick={openModal}>
+                      Add Airport
+                    </button>
+                  </div>
+                  <div className="col-lg-6 sortBy  ">
+                    <select
+                      style={{
+                        padding: "10px",
+                        borderColor: "red",
+                        borderRadius: "10px",
+                        outline: "none",
+                      }}
+                      name="sort"
+                      onChange={sortBy}
+                    >
+                      <option disabled selected>
+                        Sort By
+                      </option>
+                      <option value="airportNameAsc">
+                        Airport IN Accending Order
+                      </option>
+                      <option value="airportNameDsc">
+                        Airport IN Decending Order
+                      </option>
+                      <option value="recent"> Recent</option>
+                      <option value="older"> Older</option>
+                      <option value="fuelCapacityAsc">
+                        Fuel Capacity In Asccending Order
+                      </option>
+                      <option value="fuelCapacityDsc">
+                        Fuel Capacity In Desccending Order
+                      </option>
+                      <option value="fuelAvlAsc">
+                        Fuel Availability In Assccending Order
+                      </option>
+                      <option value="fuelAvlDsc">
+                        Fuel Availability In Dessccending Order
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-12 mt-5">
+              <div class="table-responsive-md ">
+                <table className="table table-sm  ">
+                  <thead className="table-dark">
+                    <tr>
+                      <th scope="col">Date/Time</th>
+                      <th scope="col">Airport ID</th>
+                      <th scope="col">Airport Name</th>
+                      <th scope="col">Fuel Capacity(in liter)</th>
+                      <th scope="col">Fuel Availabe(in liter)</th>
+                      <th scope="col">Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {AirportReducer.airports.length > 0 &&
+                      AirportReducer.airports.map((data, index) => {
+                        return <ShowAirports data={data} key={index} />;
+                      })}
+                  </tbody>
+                </table>
+              </div>
+              {AirportReducer.airports.length < 1 && (
+                <div className="text-center text-danger">No Airport Found</div>
+              )}
+              {Pagination()}
+            </div>
           </div>
         </div>
-      </div>
+      </main>
     </>
   );
 };

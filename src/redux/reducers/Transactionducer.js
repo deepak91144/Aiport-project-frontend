@@ -2,11 +2,10 @@ import { TransactionConstant } from "../constants/TransactionConstants";
 
 const initialState = {
   transactions: [],
+  allTransactions: [],
   message: "",
   status: "",
   totalRecord: 0,
-  pMessage: "",
-  pStatus: "",
 };
 export const TransactionReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -14,12 +13,22 @@ export const TransactionReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         transactions: payload.transactions,
+        allTransactions: payload.allTransactions,
         message: payload.message,
         status: payload.status,
         totalRecord: payload.totalRecord,
+        pending: false,
       };
+    case TransactionConstant.FETCH_TRANSACTION_PENDING:
+      return { ...state, pending: true };
+    case TransactionConstant.TOGGLE_FETCH_TRANSACTION_PENDING:
+      return { ...state, pending: false };
     case TransactionConstant.ADD_TRANSACTION:
-      return { ...state, pMessage: payload.pMessage, pStatus: payload.pStatus };
+      return {
+        ...state,
+
+        pending: false,
+      };
     default:
       return state;
   }

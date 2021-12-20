@@ -17,6 +17,12 @@ export const addAircraftData = (aircraftDetails, token, userId) => {
     }
   };
 };
+export const aircraftFetchPending = () => {
+  return { type: AircraftConstants.FETCH_AIRCRAFT_PENDING };
+};
+export const toggleAircraftFetchPending = () => {
+  return { type: AircraftConstants.TOGGLE_FETCH_AIRCRAFT_PENDING };
+};
 export const fetchAircrafts = (userId, token, sort, offSet, limit) => {
   return async (dispatch) => {
     const response = await getAllAircraft(userId, token, sort, offSet, limit);

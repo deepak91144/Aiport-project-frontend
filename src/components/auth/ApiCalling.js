@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 
 const UserSignup = (user) => {
-  return fetch("http://localhost:8000/api/signup", {
+  return fetch("http://localhost:8000/api/v1/signup", {
     method: "post",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -21,7 +21,7 @@ const UserSignup = (user) => {
 };
 
 const UserSignin = (user) => {
-  return fetch("http://localhost:8000/api/signin", {
+  return fetch("http://localhost:8000/api/v1/signin", {
     method: "post",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -60,7 +60,7 @@ const signout = () => {
   if (typeof window !== "undefined") {
     localStorage.removeItem("airportJwt");
 
-    return fetch(`http://localhost:8000/api/logout`, {
+    return fetch(`http://localhost:8000/api/v1/logout`, {
       method: "GET",
     })
       .then((response) => {

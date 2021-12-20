@@ -3,22 +3,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { fetchAirport } from "../redux/actions/AirportActions";
+
 import {
-  addTransactionData,
   fetchTransactions,
+  toggleTransactionFetchPending,
+  transactionFetchPending,
 } from "../redux/actions/TransactionActions";
 import { isAuthenticated, signout } from "./auth/ApiCalling";
 
-import {
-  createTransaction,
-  getAllAircraftForSorting,
-  getAllAirportsForSorting,
-  getAllTransaction,
-} from "./CommonApiCalls";
+import { createTransaction, getAllTransaction } from "./CommonApiCalls";
 import Menu from "./Menu";
 import ShowTransaction from "./ShowTransaction";
 
 const Transaction = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
   let [validationErr, setValidationErr] = useState([]);
   const [errorMsg, setErrorMsg] = useState("");
@@ -31,7 +30,7 @@ const Transaction = () => {
   const history = useHistory();
   const [textForSorting, setTextForSorting] = useState("firstFetch");
   const [modal, setModal] = useState(false);
-
+  const addBtnRef = useRef();
   const [currentPage, setCurrentPage] = useState(1);
   const sortByAirportRef = useRef();
   const sortByRef = useRef();
@@ -74,9 +73,17 @@ const Transaction = () => {
     setTransactionData((preVal) => {
       return { ...preVal, [name]: value };
     });
+    if (
+      transactionData.transactionType !== "" &&
+      transactionData.airportId !== "" &&
+      transactionData.quantity !== ""
+    ) {
+      addBtnRef.current.disabled = false;
+    }
   };
   const addTransaction = async (event) => {
     event.preventDefault();
+    dispatch(transactionFetchPending());
     var userId = "";
     if (!user) {
       userId = "";
@@ -97,9 +104,10 @@ const Transaction = () => {
       if (response.status === "ok") {
         setTextForSorting("firstFetch");
         fetchAllTransaction(textForSorting, 1, limit);
-
+        dispatch(fetchAirport("firstFetch", 1, 10));
         toast.success("New Transaction Done Successfully", {
           position: "top-center",
+          autoClose: 2000,
         });
         closeModal();
 
@@ -113,6 +121,8 @@ const Transaction = () => {
           };
         });
       } else {
+        dispatch(toggleTransactionFetchPending());
+
         toast.error(`${response.message}`, {
           position: "top-center",
         });
@@ -126,6 +136,7 @@ const Transaction = () => {
     setModal(false);
   };
   const sortBy = async (event) => {
+    dispatch(transactionFetchPending());
     const text = event.target.value;
     fetchAllTransaction(text, 1, limit);
     sortByAirportRef.current.selectedIndex = null;
@@ -133,6 +144,7 @@ const Transaction = () => {
     setCurrentPage(1);
   };
   const sortByAiport = async (e) => {
+    dispatch(transactionFetchPending());
     const text = e.target.value;
     sortByRef.current.selectedIndex = null;
     fetchAllTransaction(text, 1, limit);
@@ -162,6 +174,7 @@ const Transaction = () => {
               <button
                 className="btn btn-danger"
                 onClick={() => {
+                  dispatch(transactionFetchPending());
                   fetchAllTransaction(textForSorting, currentPage - 1, limit);
                   setCurrentPage(currentPage - 1);
                 }}
@@ -175,6 +188,7 @@ const Transaction = () => {
                   <button
                     className="btn btn-primary m-2"
                     onClick={(e) => {
+                      dispatch(transactionFetchPending());
                       fetchAllTransaction(textForSorting, data, limit);
                       setCurrentPage(data);
                     }}
@@ -191,6 +205,7 @@ const Transaction = () => {
               <button
                 className="btn btn-success"
                 onClick={() => {
+                  dispatch(transactionFetchPending());
                   fetchAllTransaction(textForSorting, currentPage + 1, limit);
                   setCurrentPage(currentPage + 1);
                 }}
@@ -207,14 +222,16 @@ const Transaction = () => {
   return (
     <>
       <Menu />
-      <ToastContainer />
+
+      <ToastContainer autoClose={2000} />
+
       {modal && (
         <div className="aiportModal" style={{ display: modal }}>
-          <div className="modalForm">
-            <form method="post" onSubmit={addTransaction} autocomplete="off">
-              <h4 className="text-center text-primary">Create Transaction</h4>
+          <div className="modalForm transactionModal">
+            <h4 className="text-center text-primary">Create Transaction</h4>
 
-              <hr />
+            <hr />
+            <form method="post" onSubmit={addTransaction} autocomplete="off">
               <div className="formCon">
                 <select required name="transactionType" onChange={handleChange}>
                   <option disabled selected>
@@ -258,6 +275,7 @@ const Transaction = () => {
 
                 <input
                   type="number"
+                  className="qty"
                   name="quantity"
                   placeholder="Quantity"
                   required="required"
@@ -265,9 +283,25 @@ const Transaction = () => {
                   // value={transactionData.quantity}
                 />
 
-                <button type="submit" className="btn btn-primary btn-lg">
+                <button
+                  type="submit"
+                  ref={addBtnRef}
+                  disabled
+                  className="btn btn-primary btn-lg"
+                >
                   Make Transaction
                 </button>
+                {TransactionReducer.pending &&
+                TransactionReducer.error !== "error" ? (
+                  <div
+                    className="text-success"
+                    style={{ fontSize: "20px", marginTop: "3px" }}
+                  >
+                    creating...
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
             </form>
 
@@ -277,89 +311,109 @@ const Transaction = () => {
           </div>
         </div>
       )}
+      <main>
+        <div className="container">
+          <div className="row">
+            <div className="col-md-12 text-center ">
+              <div className="container text-center">
+                <div className="row text-center">
+                  <div className="col-lg-4 ">
+                    <button
+                      className="btn btn-primary mt-2 text-center"
+                      onClick={openModal}
+                    >
+                      create Transaction
+                    </button>
+                  </div>
+                  <div className="col-lg-4 sortBy">
+                    <select
+                      style={{
+                        padding: "10px",
+                        borderColor: "red",
+                        borderRadius: "10px",
+                        outline: "none",
+                        width: "58%",
+                      }}
+                      ref={sortByRef}
+                      name="sort"
+                      onChange={sortBy}
+                    >
+                      <option disabled selected>
+                        Sort By
+                      </option>
 
-      <div className="container mt-3">
-        <div className="row">
-          <div className="col-md-12 text-center ">
-            <button className="btn btn-primary mt-2" onClick={openModal}>
-              create Transaction
-            </button>
-            <select
-              style={{
-                marginLeft: "30px",
-                padding: "10px",
-                borderColor: "red",
-                borderRadius: "10px",
-                outline: "none",
-              }}
-              ref={sortByRef}
-              name="sort"
-              onChange={sortBy}
-            >
-              <option disabled selected>
-                Sort By
-              </option>
-              {/* <option value="airportNameAsc">Airport IN Accending Order</option>
-              <option value="airportNameDsc">Airport IN Decending Order</option> */}
-              <option value="recent"> Recent</option>
-              <option value="older"> Older</option>
-              <option value="in">IN Type Transaction</option>
-              <option value="out">OUT Type Transaction</option>
-              <option value="quantityAsc">Quantity In Assccending Order</option>
-              <option value="quantityDsc">
-                Quantity In Dessccending Order
-              </option>
-            </select>
-            <select
-              style={{
-                marginLeft: "30px",
-                padding: "10px",
-                borderColor: "red",
-                borderRadius: "10px",
-                outline: "none",
-              }}
-              ref={sortByAirportRef}
-              name="sort"
-              onChange={sortByAiport}
-            >
-              <option disabled selected>
-                Filter By Airport
-              </option>
-              {/* <option value="airportNameAsc">Airport IN Accending Order</option>
-              <option value="airportNameDsc">Airport IN Decending Order</option> */}
-              {AirportReducer.allAirport.map((data, index) => {
-                return (
-                  <>
-                    <option value={data._id}>{data.airportName}</option>
-                  </>
-                );
-              })}
-            </select>
-          </div>
-          <div className="col-md-12 mt-3">
-            <table className="table table-sm mt-2 table-borderless ">
-              <thead className="table-dark">
-                <tr>
-                  <th scope="col">Date/Time</th>
-                  <th scope="col">Airline</th>
-                  <th scope="col">Quantity(in liter)</th>
-                  <th scope="col">Transaction Type</th>
-                  <th scope="col">Airport</th>
-                </tr>
-              </thead>
-              <tbody>
-                {TransactionReducer.transactions.map((data, index) => {
-                  return <ShowTransaction data={data} key={index} />;
-                })}
-              </tbody>
-            </table>
-            {TransactionReducer.transactions.length < 1 && (
-              <div className="text-center text-danger">No Airport Found</div>
-            )}
-            {Pagination()}
+                      <option value="recent"> Recent</option>
+                      <option value="older"> Older</option>
+                      <option value="in">IN Type Transaction</option>
+                      <option value="out">OUT Type Transaction</option>
+                      <option value="quantityAsc">
+                        Quantity In Assccending Order
+                      </option>
+                      <option value="quantityDsc">
+                        Quantity In Dessccending Order
+                      </option>
+                    </select>
+                  </div>
+                  <div className="col-lg-4 sortBy ">
+                    <select
+                      style={{
+                        padding: "10px",
+                        borderColor: "red",
+                        borderRadius: "10px",
+                        outline: "none",
+                        width: "58%",
+                      }}
+                      ref={sortByAirportRef}
+                      name="sort"
+                      onChange={sortByAiport}
+                    >
+                      <option disabled selected>
+                        Filter By Airport
+                      </option>
+
+                      {AirportReducer.allAirport.map((data, index) => {
+                        return (
+                          <>
+                            <option value={data._id}>{data.airportName}</option>
+                          </>
+                        );
+                      })}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-12 mt-5">
+              <div class="table-responsive-md">
+                <table className="table table-sm mt-2 table-borderless ">
+                  <thead className="table-dark">
+                    <tr>
+                      <th scope="col">Date/Time</th>
+                      <th scope="col">Airline</th>
+                      <th scope="col">Quantity(in liter)</th>
+                      <th scope="col">Transaction Type</th>
+                      <th scope="col">Airport</th>
+                      <th>Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {TransactionReducer.transactions.length > 0 &&
+                      TransactionReducer.transactions.map((data, index) => {
+                        return <ShowTransaction data={data} key={index} />;
+                      })}
+                  </tbody>
+                </table>
+              </div>
+              {TransactionReducer.transactions.length < 1 && (
+                <div className="text-center text-danger">
+                  No Transaction Found
+                </div>
+              )}
+              {Pagination()}
+            </div>
           </div>
         </div>
-      </div>
+      </main>
     </>
   );
 };

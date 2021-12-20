@@ -5,12 +5,18 @@ import { AirportConstant } from "../constants/AirportConstants";
 export const addAirportData = (airportDetails, token, userId) => {
   return async (dispatch) => {
     const response = await createAirport(airportDetails, token, userId);
-    console.log(response);
+
     dispatch({
       type: AirportConstant.ADD_AIRPORT,
       payload: { pMessage: response.message, pStatus: response.status },
     });
   };
+};
+export const airportFetchPending = () => {
+  return { type: AirportConstant.FETCH_AIRPORT_PENDING };
+};
+export const toggleAirportFetchPending = () => {
+  return { type: AirportConstant.TOGGLE_FETCH_AIRPORT_PENDING };
 };
 
 export const fetchAirport = (sort, page, limit) => {
@@ -27,7 +33,7 @@ export const fetchAirport = (sort, page, limit) => {
   return async (dispatch) => {
     // api calling for fetching all airport
     const response = await getAllAirports(token, userId, sort, offSet, limit);
-    // console.log(response);
+
     dispatch({
       type: AirportConstant.FETCH_AIRPORT,
       payload: {
@@ -36,6 +42,8 @@ export const fetchAirport = (sort, page, limit) => {
         message: response.message,
         status: response.status,
         allAirport: response.allAirport,
+        TopFuelAvalableAirports: response.TopFuelAvalableAirports,
+        TopFuelCapacityAirports: response.TopFuelCapacityAirports,
       },
     });
   };
