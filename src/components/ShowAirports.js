@@ -9,9 +9,9 @@ import { deleteAirport } from "./CommonApiCalls";
 import { ToastContainer, toast } from "react-toastify";
 const ShowAirports = ({ data }) => {
   const dispatch = useDispatch();
-  const { user, token } = isAuthenticated();
+  const { token } = isAuthenticated();
   const deleteAirportData = async (airportId) => {
-    const response = await deleteAirport(user._id, token, airportId);
+    const response = await deleteAirport(token, airportId);
     console.log(response.message);
     dispatch(airportFetchPending());
     dispatch(fetchAirport("firstFetch", 1, 10));

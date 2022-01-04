@@ -15,6 +15,7 @@ import {
   fetchAirport,
   toggleAirportFetchPending,
 } from "../redux/actions/AirportActions";
+import { AuthReducer } from "../redux/reducers/auth/AuthReducer";
 
 const AddAirport = () => {
   //state to toggle modal, modal can be shown value is true else modal remains closed
@@ -31,7 +32,7 @@ const AddAirport = () => {
   // state to hold limit value
   const [limit, setLimit] = useState(10);
   // destructure user and token from isAuthenticated function
-  const { user, token } = isAuthenticated();
+  const { token } = isAuthenticated();
   // state that holds sorting text
   const [sortByText, setSortByText] = useState("firstFetch");
   //state that holds what current page is
@@ -53,15 +54,8 @@ const AddAirport = () => {
   const addAirport = async (event) => {
     event.preventDefault();
     dispatch(airportFetchPending());
-    // varibale holds userId
-    var userId = "";
-    // if user doesnt exist make userId to blank else tore user id to userId variable
-    if (!user) {
-      userId = "";
-    } else {
-      userId = user._id;
-    }
-    const response = await createAirport(airportdata, token, userId);
+
+    const response = await createAirport(airportdata, token);
     if (response) {
       if (
         response.message === "unAthurizedUser" ||
@@ -114,12 +108,16 @@ const AddAirport = () => {
 
   // useEfect hook
   useEffect(() => {
-    // call fetchAirports method to fetch all airport when firsttime component loaded
-    // fetchAirports(sortByText, 1, 3);
+    if (AuthReducer.invalidToken === true) {
+      signout();
+      history.push("/signin");
+    }
     if (AirportReducer.status !== "ok") {
+      // call fetchAirports method to fetch all airport when firsttime component loaded
+      // fetchAirports(sortByText, 1, 3);
       dispatch(fetchAirport(sortByText, 1, limit));
     }
-  }, []);
+  });
 
   // function to show modal
   const openModal = () => {
@@ -281,55 +279,54 @@ const AddAirport = () => {
         </div>
       )}
       <main>
+        <div className="container ">
+          <div className="row ">
+            <div className="col-lg-6 d-flex justify-content-center  justify-content-lg-start ">
+              <button className="btn btn-primary " onClick={openModal}>
+                Add Airport
+              </button>
+            </div>
+            <div className="col-lg-6 sortBy  d-flex   justify-content-center justify-content-lg-end ">
+              <select
+                style={{
+                  padding: "10px",
+                  borderColor: "red",
+                  borderRadius: "10px",
+                  outline: "none",
+                }}
+                name="sort"
+                onChange={sortBy}
+              >
+                <option disabled selected>
+                  Sort By
+                </option>
+                <option value="airportNameAsc">
+                  Airport IN Accending Order
+                </option>
+                <option value="airportNameDsc">
+                  Airport IN Decending Order
+                </option>
+                <option value="recent"> Recent</option>
+                <option value="older"> Older</option>
+                <option value="fuelCapacityAsc">
+                  Fuel Capacity In Asccending Order
+                </option>
+                <option value="fuelCapacityDsc">
+                  Fuel Capacity In Desccending Order
+                </option>
+                <option value="fuelAvlAsc">
+                  Fuel Availability In Assccending Order
+                </option>
+                <option value="fuelAvlDsc">
+                  Fuel Availability In Dessccending Order
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
         <div className="container">
           <div className="row">
-            <div className="col-md-12  mt-3 text-center">
-              <div className="container">
-                <div className="row">
-                  <div className="col-lg-6 ">
-                    <button className="btn btn-primary " onClick={openModal}>
-                      Add Airport
-                    </button>
-                  </div>
-                  <div className="col-lg-6 sortBy  ">
-                    <select
-                      style={{
-                        padding: "10px",
-                        borderColor: "red",
-                        borderRadius: "10px",
-                        outline: "none",
-                      }}
-                      name="sort"
-                      onChange={sortBy}
-                    >
-                      <option disabled selected>
-                        Sort By
-                      </option>
-                      <option value="airportNameAsc">
-                        Airport IN Accending Order
-                      </option>
-                      <option value="airportNameDsc">
-                        Airport IN Decending Order
-                      </option>
-                      <option value="recent"> Recent</option>
-                      <option value="older"> Older</option>
-                      <option value="fuelCapacityAsc">
-                        Fuel Capacity In Asccending Order
-                      </option>
-                      <option value="fuelCapacityDsc">
-                        Fuel Capacity In Desccending Order
-                      </option>
-                      <option value="fuelAvlAsc">
-                        Fuel Availability In Assccending Order
-                      </option>
-                      <option value="fuelAvlDsc">
-                        Fuel Availability In Dessccending Order
-                      </option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
             <div className="col-md-12 mt-5">
               <div class="table-responsive-md ">
                 <table className="table table-sm  ">

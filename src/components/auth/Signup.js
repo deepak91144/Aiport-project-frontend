@@ -5,14 +5,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUser, logout } from "../../redux/actions/auth/AuthActions";
 
 const Signup = () => {
+  const { AuthReducer } = useSelector((state) => state);
   const [showError, setShowError] = useState("");
   const dispatch = useDispatch();
   const history = useHistory();
-  const AuthReducer = useSelector((state) => state.AuthReducer);
-  if (AuthReducer.status === "ok") {
-    authenticate(AuthReducer.user);
-  }
+
   useEffect(() => {
+    if (AuthReducer.status === "ok") {
+      authenticate(AuthReducer.user.token);
+    }
     isAuthenticated() && history.push("/dashboard");
   });
   const [data, setData] = useState({
@@ -29,12 +30,13 @@ const Signup = () => {
   const signupUser = (event) => {
     event.preventDefault();
     dispatch(addUser(data));
+
     // UserSignup(data).then((res) => {
     //   if (res.status === "ok") {
     //     res.message = null;
     //     res.status = null;
     //     console.log(res);
-    // authenticate(res);
+    //     authenticate(res);
     //   }
     //   if (res.status === "error") {
     //     setShowError(res.message);

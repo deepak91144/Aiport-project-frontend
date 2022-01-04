@@ -83,7 +83,7 @@ const Dashboard = () => {
       <main>
         <div className="container mt-5">
           <div className="row">
-            <div className="col-md-7 customCard text-center">
+            <div className="col-md-7 customCardParent text-center">
               <h3> Fuel Transaction</h3>
               <Bar
                 data={{
@@ -98,46 +98,45 @@ const Dashboard = () => {
                 }}
               />
             </div>
-            <div className="col-md-4 customCard secondPart">
-              <h3 className="text-center">Latest Transactions</h3>
-              {TransactionReducer.allTransactions.length > 0 &&
-                TransactionReducer.allTransactions
-                  .slice(0, 5)
-                  .map((data, index) => {
-                    return (
-                      <>
-                        <div className="col-lg-6 mt-3 text-white">
-                          <div
-                            className={`${bgColors[index]}`}
-                            // style={{ backgroundColor: "red !important" }}
-                          >
-                            <div className="card-header">
-                              {data.airportId !== null &&
-                                data.airportId.airportName}
-                            </div>
-                            <div className="card-body">
-                              <h4 className="card-title">
-                                {data.transactionType} type
-                              </h4>
-                              <h4 className="card-text">
-                                {data.quantity} (liter)
-                              </h4>
-                              <h4>
-                                {new Date(data.createdAt).toLocaleString()}
-                              </h4>
+            <div className="col-md-4 offset-md-1 customCardParent secondPart">
+              <div className="row mt-4 mb-4">
+                <h3 className="text-center">Latest Transactions</h3>
+                {TransactionReducer.allTransactions.length > 0 &&
+                  TransactionReducer.allTransactions
+                    .slice(0, 5)
+                    .map((data, index) => {
+                      return (
+                        <>
+                          <div className="col-lg-6 mt-3 ">
+                            <div className="customCard text-center">
+                              <div className="card-header text-success h4">
+                                {data.airportId !== null &&
+                                  data.airportId.airportName}
+                              </div>
+                              <div className="card-body">
+                                <h4 className="card-title text-primary">
+                                  {data.transactionType} type
+                                </h4>
+                                <h4 className="card-text text-primary">
+                                  {data.quantity} (liter)
+                                </h4>
+                                <h4 className="text-primary">
+                                  {new Date(data.createdAt).toLocaleString()}
+                                </h4>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </>
-                    );
-                  })}
+                        </>
+                      );
+                    })}
+              </div>
             </div>
           </div>
         </div>
         <div className="container mt-5">
           <div className="row">
-            <div className="col-md-7 customCard text-center">
-              <h3> Fuel Transaction</h3>
+            <div className="col-md-7 customCardParent text-center">
+              <h3>OUT Type Fuel Transaction</h3>
               <Line
                 data={{
                   labels: airportsInLatestOutTypeTransaction.slice(0, 5),
@@ -151,43 +150,46 @@ const Dashboard = () => {
                 }}
               />
             </div>
-            <div className="col-md-4 customCard secondPart">
-              <h3 className="text-center">Latest Out Type Transactions</h3>
-              {latestOutTypeTransaction.length > 0 &&
-                latestOutTypeTransaction.slice(0, 5).map((data, index) => {
-                  return (
-                    <>
-                      <div className="col-lg-6 text-white mt-3">
-                        <div
-                          className={`${bgColors[index]}`}
-                          // style={{ backgroundColor: "red !important" }}
-                        >
-                          <div className="card-header">
-                            {data.airportId !== null &&
-                              data.airportId.airportName}
-                          </div>
-                          <div className="card-body">
-                            <h4 className="card-title">
-                              {data.transactionType} type
-                            </h4>
-                            <h4 className="card-text">
-                              {data.quantity} (liter)
-                            </h4>
-                            <h4>{new Date(data.createdAt).toLocaleString()}</h4>
+            <div className="col-md-4 offset-md-1 customCardParent secondPart">
+              <div className="row mt-4 mb-4">
+                <h3 className="text-center">Latest Out Type Transactions</h3>
+                {latestOutTypeTransaction.length > 0 &&
+                  latestOutTypeTransaction.slice(0, 5).map((data, index) => {
+                    return (
+                      <>
+                        <div className="col-lg-6  mt-3">
+                          <div className="customCard text-center">
+                            <div className="card-header text-success h4">
+                              {data.airportId !== null &&
+                                data.airportId.airportName}
+                            </div>
+                            <div className="card-body">
+                              <h4 className="card-title text-primary">
+                                {data.transactionType} type
+                              </h4>
+                              <h4 className="card-text text-primary">
+                                {data.quantity} (liter)
+                              </h4>
+                              <h4 className="text-primary">
+                                {new Date(data.createdAt).toLocaleString()}
+                              </h4>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </>
-                  );
-                })}
+                      </>
+                    );
+                  })}
+              </div>
             </div>
           </div>
         </div>
         <div className="container mt-5">
           <div className="row">
-            <div className="col-md-7 customCard text-center">
-              <h3> Fuel Transaction</h3>
+            <div className="col-md-7 customCardParent text-center">
+              <h3> IN Type Fuel Transaction</h3>
               <Doughnut
+                width={50}
+                height={50}
                 data={{
                   labels: airportsInLatestInTypeTransaction.slice(0, 5),
                   datasets: [
@@ -200,41 +202,42 @@ const Dashboard = () => {
                 }}
               />
             </div>
-            <div className="col-md-4 customCard secondPart">
-              <h3 className="text-center">Latest IN Type Transactions</h3>
-              {latestInTypeTransaction.length > 0 &&
-                latestInTypeTransaction.slice(0, 5).map((data, index) => {
-                  return (
-                    <>
-                      <div className="col-lg-6 text-white mt-3">
-                        <div
-                          className={`${bgColors[index]}`}
-                          // style={{ backgroundColor: "red !important" }}
-                        >
-                          <div className="card-header">
-                            {data.airportId !== null &&
-                              data.airportId.airportName}
-                          </div>
-                          <div className="card-body">
-                            <h4 className="card-title">
-                              {data.transactionType} type
-                            </h4>
-                            <h4 className="card-text">
-                              {data.quantity} (liter)
-                            </h4>
-                            <h4>{new Date(data.createdAt).toLocaleString()}</h4>
+            <div className="col-md-4 offset-md-1 customCardParent secondPart">
+              <div className="row mt-4 mb-4">
+                <h3 className="text-center">Latest IN Type Transactions</h3>
+                {latestInTypeTransaction.length > 0 &&
+                  latestInTypeTransaction.slice(0, 5).map((data, index) => {
+                    return (
+                      <>
+                        <div className="col-lg-6  mt-3">
+                          <div className="customCard text-center">
+                            <div className="card-header text-success h4">
+                              {data.airportId !== null &&
+                                data.airportId.airportName}
+                            </div>
+                            <div className="card-body">
+                              <h4 className="card-title text-primary">
+                                {data.transactionType} type
+                              </h4>
+                              <h4 className="card-text text-primary">
+                                {data.quantity} (liter)
+                              </h4>
+                              <h4 className="text-primary">
+                                {new Date(data.createdAt).toLocaleString()}
+                              </h4>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </>
-                  );
-                })}
+                      </>
+                    );
+                  })}
+              </div>
             </div>
           </div>
         </div>
         <div className="container  mt-5">
           <div className="row">
-            <div className="col-md-7 customCard">
+            <div className="col-md-7 customCardParent">
               <h3 className="text-center">
                 {" "}
                 Airport FuelCapacity And fuelAvailablity
@@ -258,32 +261,31 @@ const Dashboard = () => {
                 }}
               />
             </div>
-            <div className="col-md-4 customCard secondPart">
-              <h3 className="text-center">Top 5 Fuel Available Airports </h3>
-              {AirportReducer.TopFuelAvalableAirports.length > 0 &&
-                AirportReducer.TopFuelAvalableAirports.slice(0, 5).map(
-                  (data, index) => {
-                    return (
-                      <>
-                        <div className="col-lg-6 text-white mt-3">
-                          <div
-                            className={`${bgColors[index]}`}
-                            // style={{ backgroundColor: "red !important" }}
-                          >
-                            <div className="card-header">
-                              {data.airportName}
-                            </div>
-                            <div className="card-body">
-                              <h4 className="card-text">
-                                {data.fuelAvailable} (liter)
-                              </h4>
+            <div className="col-md-4 offset-md-1 customCardParent secondPart">
+              <div className="row mt-4 mb-4">
+                <h3 className="text-center">Top 5 Fuel Available Airports </h3>
+                {AirportReducer.TopFuelAvalableAirports.length > 0 &&
+                  AirportReducer.TopFuelAvalableAirports.slice(0, 5).map(
+                    (data, index) => {
+                      return (
+                        <>
+                          <div className="col-lg-6  mt-3">
+                            <div className="customCard text-center">
+                              <div className="card-header text-success h4">
+                                {data.airportName}
+                              </div>
+                              <div className="card-body">
+                                <h4 className="card-text text-primary">
+                                  {data.fuelAvailable} (liter)
+                                </h4>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </>
-                    );
-                  }
-                )}
+                        </>
+                      );
+                    }
+                  )}
+              </div>
             </div>
           </div>
         </div>

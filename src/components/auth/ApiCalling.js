@@ -43,7 +43,7 @@ const UserSignin = (user) => {
 
 const authenticate = (data) => {
   if (typeof window !== "undefined") {
-    localStorage.setItem("airportJwt", JSON.stringify(data));
+    localStorage.setItem("airportJwt", JSON.stringify({ token: data }));
   }
 };
 const isAuthenticated = () => {

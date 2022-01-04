@@ -29,12 +29,7 @@ export const AirportReducer = (state = initialState, { type, payload }) => {
       return { ...state, pending: true };
     case AirportConstant.TOGGLE_FETCH_AIRPORT_PENDING:
       return { ...state, pending: false };
-    case AirportConstant.ADD_AIRPORT:
-      return {
-        ...state,
 
-        pending: false,
-      };
     default:
       return state;
   }

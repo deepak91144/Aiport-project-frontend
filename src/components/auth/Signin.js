@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { NavLink } from "react-router-dom";
 import { loginUser, logout } from "../../redux/actions/auth/AuthActions";
+import { AuthReducer } from "../../redux/reducers/auth/AuthReducer";
 
 import { authenticate, isAuthenticated, UserSignin } from "./ApiCalling";
 
@@ -10,13 +11,12 @@ const Signin = () => {
   // state variable for showing error message
   const [showErr, setShowErr] = useState("");
   const dispatch = useDispatch();
-  const AuthReducer = useSelector((state) => state.AuthReducer);
-  if (AuthReducer.status === "ok") {
-    authenticate(AuthReducer.user);
-    // if the user already signed in send him to dashboard page
-  }
+  const { AuthReducer } = useSelector((state) => state);
   // useEffect hook that runs after each render of components
   useEffect(() => {
+    if (AuthReducer.status === "ok") {
+      authenticate(AuthReducer.user.token);
+    }
     isAuthenticated() && history.push("/dashboard");
   });
   // initiate useHistory hook
@@ -40,10 +40,12 @@ const Signin = () => {
   const signinUser = async (event) => {
     // prevent the page being refreshed
     event.preventDefault();
+    dispatch(loginUser(data));
+
     // calling the API for signin
     // const response = await UserSignin(data);
-    dispatch(loginUser(data));
-    // after successfull signin do following things
+
+    // // after successfull signin do following things
     // if (response.status === "ok") {
     //   response.status = null;
     //   response.message = null;
@@ -76,11 +78,7 @@ const Signin = () => {
 
             <div className="form-group">
               <div className="input-group">
-                <div className="input-group-prepend">
-                  {/* <span className="input-group-text">
-                    <i className="fa fa-paper-plane"></i>
-                  </span> */}
-                </div>
+                <div className="input-group-prepend"></div>
                 <input
                   type="email"
                   className="form-control"

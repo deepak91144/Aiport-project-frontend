@@ -39,16 +39,11 @@ const Transaction = () => {
     (state) => state
   );
 
-  const { user, token } = isAuthenticated();
-  var userId = "";
-  if (!user) {
-    userId = "";
-  } else {
-    userId = user._id;
-  }
+  const { token } = isAuthenticated();
+
   const fetchAllTransaction = async (sort, page, limit) => {
     const offSet = (page - 1) * limit;
-    dispatch(fetchTransactions(userId, token, sort, offSet, limit));
+    dispatch(fetchTransactions(token, sort, offSet, limit));
   };
   useEffect(async () => {
     if (TransactionReducer.status !== "ok") {
@@ -84,14 +79,8 @@ const Transaction = () => {
   const addTransaction = async (event) => {
     event.preventDefault();
     dispatch(transactionFetchPending());
-    var userId = "";
-    if (!user) {
-      userId = "";
-    } else {
-      userId = user._id;
-    }
 
-    const response = await createTransaction(transactionData, userId, token);
+    const response = await createTransaction(transactionData, token);
 
     if (response) {
       if (
@@ -312,77 +301,73 @@ const Transaction = () => {
         </div>
       )}
       <main>
+        <div className="container ">
+          <div className="row ">
+            <div className="col-lg-4 d-flex   justify-content-center justify-content-lg-start ">
+              <button className="btn btn-primary  " onClick={openModal}>
+                create Transaction
+              </button>
+            </div>
+            <div className="col-lg-4 sortBy d-flex   justify-content-center justify-content-lg-center">
+              <select
+                style={{
+                  padding: "10px",
+                  borderColor: "red",
+                  borderRadius: "10px",
+                  outline: "none",
+                  width: "58%",
+                }}
+                ref={sortByRef}
+                name="sort"
+                onChange={sortBy}
+              >
+                <option disabled selected>
+                  Sort By
+                </option>
+
+                <option value="recent"> Recent</option>
+                <option value="older"> Older</option>
+                <option value="in">IN Type Transaction</option>
+                <option value="out">OUT Type Transaction</option>
+                <option value="quantityAsc">
+                  Quantity In Assccending Order
+                </option>
+                <option value="quantityDsc">
+                  Quantity In Dessccending Order
+                </option>
+              </select>
+            </div>
+            <div className="col-lg-4 sortBy d-flex   justify-content-center justify-content-lg-end ">
+              <select
+                style={{
+                  padding: "10px",
+                  borderColor: "red",
+                  borderRadius: "10px",
+                  outline: "none",
+                  width: "58%",
+                }}
+                ref={sortByAirportRef}
+                name="sort"
+                onChange={sortByAiport}
+              >
+                <option disabled selected>
+                  Filter By Airport
+                </option>
+
+                {AirportReducer.allAirport.map((data, index) => {
+                  return (
+                    <>
+                      <option value={data._id}>{data.airportName}</option>
+                    </>
+                  );
+                })}
+              </select>
+            </div>
+          </div>
+        </div>
+
         <div className="container">
           <div className="row">
-            <div className="col-md-12 text-center ">
-              <div className="container text-center">
-                <div className="row text-center">
-                  <div className="col-lg-4 ">
-                    <button
-                      className="btn btn-primary mt-2 text-center"
-                      onClick={openModal}
-                    >
-                      create Transaction
-                    </button>
-                  </div>
-                  <div className="col-lg-4 sortBy">
-                    <select
-                      style={{
-                        padding: "10px",
-                        borderColor: "red",
-                        borderRadius: "10px",
-                        outline: "none",
-                        width: "58%",
-                      }}
-                      ref={sortByRef}
-                      name="sort"
-                      onChange={sortBy}
-                    >
-                      <option disabled selected>
-                        Sort By
-                      </option>
-
-                      <option value="recent"> Recent</option>
-                      <option value="older"> Older</option>
-                      <option value="in">IN Type Transaction</option>
-                      <option value="out">OUT Type Transaction</option>
-                      <option value="quantityAsc">
-                        Quantity In Assccending Order
-                      </option>
-                      <option value="quantityDsc">
-                        Quantity In Dessccending Order
-                      </option>
-                    </select>
-                  </div>
-                  <div className="col-lg-4 sortBy ">
-                    <select
-                      style={{
-                        padding: "10px",
-                        borderColor: "red",
-                        borderRadius: "10px",
-                        outline: "none",
-                        width: "58%",
-                      }}
-                      ref={sortByAirportRef}
-                      name="sort"
-                      onChange={sortByAiport}
-                    >
-                      <option disabled selected>
-                        Filter By Airport
-                      </option>
-
-                      {AirportReducer.allAirport.map((data, index) => {
-                        return (
-                          <>
-                            <option value={data._id}>{data.airportName}</option>
-                          </>
-                        );
-                      })}
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
             <div className="col-md-12 mt-5">
               <div class="table-responsive-md">
                 <table className="table table-sm mt-2 table-borderless ">

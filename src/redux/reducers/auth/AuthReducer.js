@@ -5,6 +5,7 @@ const initialState = {
   message: "",
   status: "",
   apiCalling: "",
+  invalidToken: false,
 };
 export const AuthReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -15,6 +16,7 @@ export const AuthReducer = (state = initialState, { type, payload }) => {
         message: payload.message,
         status: payload.status,
         apiCalling: "signup",
+        invalidToken: false,
       };
 
     case AuthConstants.LOGIN_USER:
@@ -24,10 +26,13 @@ export const AuthReducer = (state = initialState, { type, payload }) => {
         message: payload.message,
         status: payload.status,
         apiCalling: "signin",
+        invalidToken: false,
       };
 
     case AuthConstants.LOGOUT:
-      return { user: "", message: "", status: "" };
+      return { user: "", message: "", status: "", invalidToken: false };
+    case AuthConstants.INVALID_TOKEN:
+      return { user: "", message: "", status: "", invalidToken: true };
     default:
       return state;
   }

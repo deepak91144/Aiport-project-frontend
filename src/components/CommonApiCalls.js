@@ -1,6 +1,6 @@
 export const BASEAPI = "http://localhost:8000/api/v1";
 const createAirport = (airportdata, token, userId) => {
-  return fetch(`${BASEAPI}/airport/add`, {
+  return fetch(`${BASEAPI}/airports`, {
     method: "post",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -16,7 +16,7 @@ const createAirport = (airportdata, token, userId) => {
       console.log(error);
     });
 };
-const getAllAirports = (token, userId, sort, offSet, limit) => {
+const getAllAirports = (token, sort, offSet, limit) => {
   return fetch(
     `${BASEAPI}/airports?sortBy=${sort}&offSet=${offSet}&limit=${limit}`,
     {
@@ -38,8 +38,8 @@ const getAllAirports = (token, userId, sort, offSet, limit) => {
       console.log(error);
     });
 };
-const createAircraft = (aircraftData, token, userId) => {
-  return fetch(`${BASEAPI}/aircraft/add`, {
+const createAircraft = (aircraftData, token) => {
+  return fetch(`${BASEAPI}/aircrafts`, {
     method: "post",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -55,9 +55,9 @@ const createAircraft = (aircraftData, token, userId) => {
       console.log(error);
     });
 };
-const getAllAircraft = (userId, token, sort, offSet, limit) => {
+const getAllAircraft = (token, sort, offSet, limit) => {
   return fetch(
-    `${BASEAPI}/aircraft?sortBy=${sort}&offSet=${offSet}&limit=${limit}`,
+    `${BASEAPI}/aircrafts?sortBy=${sort}&offSet=${offSet}&limit=${limit}`,
     {
       method: "GET",
       headers: {
@@ -77,8 +77,8 @@ const getAllAircraft = (userId, token, sort, offSet, limit) => {
       console.log(error);
     });
 };
-const createTransaction = (transactionDetails, userId, token) => {
-  return fetch(`${BASEAPI}/transaction/add`, {
+const createTransaction = (transactionDetails, token) => {
+  return fetch(`${BASEAPI}/transactions`, {
     method: "post",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -94,9 +94,9 @@ const createTransaction = (transactionDetails, userId, token) => {
       console.log(error);
     });
 };
-const getAllTransaction = (userId, token, sort, offSet, limit) => {
+const getAllTransaction = (token, sort, offSet, limit) => {
   return fetch(
-    `${BASEAPI}/transaction?sortBy=${sort}&offSet=${offSet}&limit=${limit}`,
+    `${BASEAPI}/transactions?sortBy=${sort}&offSet=${offSet}&limit=${limit}`,
     {
       method: "GET",
       headers: {
@@ -117,8 +117,8 @@ const getAllTransaction = (userId, token, sort, offSet, limit) => {
     });
 };
 
-const deleteAirport = async (userId, token, airportId) => {
-  return await fetch(`${BASEAPI}/airport/${airportId}`, {
+const deleteAirport = async (token, airportId) => {
+  return await fetch(`${BASEAPI}/airports/${airportId}`, {
     method: "DELETE",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -127,8 +127,8 @@ const deleteAirport = async (userId, token, airportId) => {
     },
   });
 };
-const deleteAircraft = async (userId, token, aircraftId) => {
-  return await fetch(`${BASEAPI}/aircraft/${aircraftId}`, {
+const deleteAircraft = async (token, aircraftId) => {
+  return await fetch(`${BASEAPI}/aircrafts/${aircraftId}`, {
     method: "DELETE",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -138,8 +138,8 @@ const deleteAircraft = async (userId, token, aircraftId) => {
   });
 };
 
-const deleteTransaction = async (userId, token, transactionId) => {
-  return await fetch(`${BASEAPI}/transaction/${transactionId}`, {
+const deleteTransaction = async (token, transactionId) => {
+  return await fetch(`${BASEAPI}/transactions/${transactionId}`, {
     method: "DELETE",
     headers: {
       Accept: "application/json, text/plain, */*",

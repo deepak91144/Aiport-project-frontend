@@ -24,12 +24,7 @@ export const AircraftReducer = (state = initialState, { type, payload }) => {
       return { ...state, pending: true };
     case AircraftConstants.TOGGLE_FETCH_AIRCRAFT_PENDING:
       return { ...state, pending: false };
-    case AircraftConstants.ADD_AIRCRAFT:
-      return {
-        ...state,
 
-        pending: false,
-      };
     default:
       return state;
   }

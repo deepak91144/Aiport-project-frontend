@@ -12,6 +12,7 @@ import {
   toggleAircraftFetchPending,
 } from "../redux/actions/AircraftActions";
 import { useDispatch, useSelector } from "react-redux";
+import { AuthReducer } from "../redux/reducers/auth/AuthReducer";
 
 const Aircraft = () => {
   const history = useHistory();
@@ -28,13 +29,8 @@ const Aircraft = () => {
     aircraftNo: "",
     airline: "",
   });
-  const { user, token } = isAuthenticated();
-  var userId = "";
-  if (!user) {
-    userId = "";
-  } else {
-    userId = user._id;
-  }
+  const { token } = isAuthenticated();
+
   const closeModal = () => {
     setmodal(false);
   };
@@ -51,7 +47,7 @@ const Aircraft = () => {
       });
       return;
     }
-    const response = await createAircraft(aircraftData, token, user._id);
+    const response = await createAircraft(aircraftData, token);
     if (response) {
       if (
         response.message === "unAthurizedUser" ||
@@ -138,12 +134,7 @@ const Aircraft = () => {
   const fetchAllAircraft = async (sort, page, limit) => {
     const offSet = (page - 1) * limit;
 
-    if (!user) {
-      userId = "";
-    } else {
-      userId = user._id;
-    }
-    dispatch(fetchAircrafts(userId, token, sort, offSet, limit));
+    dispatch(fetchAircrafts(token, sort, offSet, limit));
     if (AircraftReducer) {
       if (
         AircraftReducer.message === "unAthurizedUser" ||
@@ -158,10 +149,14 @@ const Aircraft = () => {
   };
 
   useEffect(() => {
+    if (AuthReducer.invalidToken) {
+      signout();
+      history.push("/");
+    }
     if (AircraftReducer.status !== "ok") {
       fetchAllAircraft(sortByText, 1, limit);
     }
-  }, []);
+  }, [AircraftReducer, AuthReducer]);
   const openModal = () => {
     setmodal(true);
   };
@@ -297,50 +292,42 @@ const Aircraft = () => {
       <main>
         <div className="container">
           <div className="row">
-            <div className="col-md-12 text-center mt-3">
-              <div className="container">
-                <div className="row">
-                  <div className="col-lg-6 ">
-                    <button
-                      className="btn btn-primary mt-2 "
-                      onClick={openModal}
-                    >
-                      Add Aircraft
-                    </button>
-                  </div>
-                  <div className="col-lg-6 sortBy">
-                    <select
-                      style={{
-                        padding: "10px",
-                        borderColor: "red",
-                        borderRadius: "10px",
-                        outline: "none",
-                      }}
-                      name="sort"
-                      onChange={sortBy}
-                    >
-                      <option disabled selected>
-                        Sort By
-                      </option>
-                      <option value="airlineAsc">
-                        Airline IN Accending Order
-                      </option>
-                      <option value="airlineDsc">
-                        Airline IN Decending Order
-                      </option>
-                      <option value="recent"> Recent</option>
-                      <option value="older"> Older</option>
-                      <option value="aircraftNoAsc">
-                        Aircraft Number In Accending Order
-                      </option>
-                      <option value="aircraftNoDsc">
-                        Aircraft Number In Descending Order
-                      </option>
-                    </select>
-                  </div>
-                </div>
-              </div>
+            <div className="col-lg-6 d-flex   justify-content-center justify-content-lg-start">
+              <button className="btn btn-primary mt-2 " onClick={openModal}>
+                Add Aircraft
+              </button>
             </div>
+            <div className="col-lg-6 sortBy d-flex   justify-content-center justify-content-lg-end">
+              <select
+                style={{
+                  padding: "10px",
+                  borderColor: "red",
+                  borderRadius: "10px",
+                  outline: "none",
+                }}
+                name="sort"
+                onChange={sortBy}
+              >
+                <option disabled selected>
+                  Sort By
+                </option>
+                <option value="airlineAsc">Airline IN Accending Order</option>
+                <option value="airlineDsc">Airline IN Decending Order</option>
+                <option value="recent"> Recent</option>
+                <option value="older"> Older</option>
+                <option value="aircraftNoAsc">
+                  Aircraft Number In Accending Order
+                </option>
+                <option value="aircraftNoDsc">
+                  Aircraft Number In Descending Order
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div className="container">
+          <div className="row">
             <div className="col-md-12 mt-5">
               <div class="table-responsive-md">
                 <table className="table table-responsive table-boarderless  ">

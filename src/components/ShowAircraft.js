@@ -10,11 +10,11 @@ import { useDispatch } from "react-redux";
 
 const ShowAircraft = ({ data }) => {
   const dispatch = useDispatch();
-  const { user, token } = isAuthenticated();
+  const { token } = isAuthenticated();
   const deleteAircraftData = async (aircraftId) => {
-    const response = await deleteAircraft(user._id, token, aircraftId);
+    const response = await deleteAircraft(token, aircraftId);
     dispatch(aircraftFetchPending());
-    dispatch(fetchAircrafts(user._id, token, "firstFetch", 0, 10));
+    dispatch(fetchAircrafts(token, "firstFetch", 0, 10));
     toast.success(`Aircraft Deleted successfully`, {
       position: "top-center",
       autoClose: 2000,

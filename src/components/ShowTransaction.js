@@ -9,16 +9,16 @@ import { deleteTransaction } from "./CommonApiCalls";
 import { ToastContainer, toast } from "react-toastify";
 const ShowTransaction = ({ data }) => {
   const dispatch = useDispatch();
-  const { user, token } = isAuthenticated();
+  const { token } = isAuthenticated();
   const deleteTransactionData = async (transactionId) => {
     dispatch(transactionFetchPending());
-    const response = await deleteTransaction(user._id, token, transactionId);
+    const response = await deleteTransaction(token, transactionId);
 
     toast.success(`transaction deleted `, {
       position: "top-center",
       autoClose: 2000,
     });
-    dispatch(fetchTransactions(user._id, token, "firstFetch", 0, 10));
+    dispatch(fetchTransactions(token, "firstFetch", 0, 10));
   };
   return (
     <>

@@ -23,12 +23,7 @@ export const TransactionReducer = (state = initialState, { type, payload }) => {
       return { ...state, pending: true };
     case TransactionConstant.TOGGLE_FETCH_TRANSACTION_PENDING:
       return { ...state, pending: false };
-    case TransactionConstant.ADD_TRANSACTION:
-      return {
-        ...state,
 
-        pending: false,
-      };
     default:
       return state;
   }
