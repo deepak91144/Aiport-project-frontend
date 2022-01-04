@@ -84,7 +84,7 @@ const Dashboard = () => {
         <div className="container mt-5">
           <div className="row">
             <div className="col-md-7 customCardParent text-center">
-              <h3> Fuel Transaction</h3>
+              <h3>Latest 5 Fuel Transaction</h3>
               <Bar
                 data={{
                   labels: airportsInTransactions.slice(0, 5),
@@ -100,7 +100,7 @@ const Dashboard = () => {
             </div>
             <div className="col-md-4 offset-md-1 customCardParent secondPart">
               <div className="row mt-4 mb-4">
-                <h3 className="text-center">Latest Transactions</h3>
+                <h3 className="text-center">Latest 5 Transactions</h3>
                 {TransactionReducer.allTransactions.length > 0 &&
                   TransactionReducer.allTransactions
                     .slice(0, 5)
@@ -109,7 +109,7 @@ const Dashboard = () => {
                         <>
                           <div className="col-lg-6 mt-3 ">
                             <div className="customCard text-center">
-                              <div className="card-header text-success h4">
+                              <div className="card-header bg-dark text-white text-success h4">
                                 {data.airportId !== null &&
                                   data.airportId.airportName}
                               </div>
@@ -118,7 +118,7 @@ const Dashboard = () => {
                                   {data.transactionType} type
                                 </h4>
                                 <h4 className="card-text text-primary">
-                                  {data.quantity} (liter)
+                                  {data.quantity} L
                                 </h4>
                                 <h4 className="text-primary">
                                   {new Date(data.createdAt).toLocaleString()}
@@ -136,7 +136,7 @@ const Dashboard = () => {
         <div className="container mt-5">
           <div className="row">
             <div className="col-md-7 customCardParent text-center">
-              <h3>OUT Type Fuel Transaction</h3>
+              <h3>Latest 5 OUT Type Fuel Transaction</h3>
               <Line
                 data={{
                   labels: airportsInLatestOutTypeTransaction.slice(0, 5),
@@ -152,14 +152,14 @@ const Dashboard = () => {
             </div>
             <div className="col-md-4 offset-md-1 customCardParent secondPart">
               <div className="row mt-4 mb-4">
-                <h3 className="text-center">Latest Out Type Transactions</h3>
+                <h3 className="text-center">Latest 5 Out Type Transactions</h3>
                 {latestOutTypeTransaction.length > 0 &&
                   latestOutTypeTransaction.slice(0, 5).map((data, index) => {
                     return (
                       <>
                         <div className="col-lg-6  mt-3">
                           <div className="customCard text-center">
-                            <div className="card-header text-success h4">
+                            <div className="card-header bg-dark text-white h4">
                               {data.airportId !== null &&
                                 data.airportId.airportName}
                             </div>
@@ -168,7 +168,7 @@ const Dashboard = () => {
                                 {data.transactionType} type
                               </h4>
                               <h4 className="card-text text-primary">
-                                {data.quantity} (liter)
+                                {data.quantity} L
                               </h4>
                               <h4 className="text-primary">
                                 {new Date(data.createdAt).toLocaleString()}
@@ -186,7 +186,7 @@ const Dashboard = () => {
         <div className="container mt-5">
           <div className="row">
             <div className="col-md-7 customCardParent text-center">
-              <h3> IN Type Fuel Transaction</h3>
+              <h3>Latest 5 IN Type Fuel Transaction</h3>
               <Doughnut
                 width={50}
                 height={50}
@@ -200,18 +200,32 @@ const Dashboard = () => {
                     },
                   ],
                 }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: true,
+                  aspectRatio: 2,
+                  plugins: {
+                    legend: {
+                      display: true,
+                      position: "bottom",
+                      labels: {
+                        padding: 4,
+                      },
+                    },
+                  },
+                }}
               />
             </div>
             <div className="col-md-4 offset-md-1 customCardParent secondPart">
               <div className="row mt-4 mb-4">
-                <h3 className="text-center">Latest IN Type Transactions</h3>
+                <h3 className="text-center">Latest 5 IN Type Transactions</h3>
                 {latestInTypeTransaction.length > 0 &&
                   latestInTypeTransaction.slice(0, 5).map((data, index) => {
                     return (
                       <>
                         <div className="col-lg-6  mt-3">
                           <div className="customCard text-center">
-                            <div className="card-header text-success h4">
+                            <div className="card-header bg-dark text-white h4">
                               {data.airportId !== null &&
                                 data.airportId.airportName}
                             </div>
@@ -271,7 +285,7 @@ const Dashboard = () => {
                         <>
                           <div className="col-lg-6  mt-3">
                             <div className="customCard text-center">
-                              <div className="card-header text-success h4">
+                              <div className="card-header bg-dark text-white text-success h4">
                                 {data.airportName}
                               </div>
                               <div className="card-body">
