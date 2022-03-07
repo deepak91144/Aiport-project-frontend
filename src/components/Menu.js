@@ -23,9 +23,9 @@ const Menu = () => {
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark  fixed-top headerNav customCard">
-        <a className="navbar-brand" href="#">
+        <h2 className="navbar-brand" href="#">
           Fuel Transaction System
-        </a>
+        </h2>
 
         <button
           className="navbar-toggler"

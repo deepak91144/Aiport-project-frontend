@@ -13,6 +13,7 @@ import {
 } from "../redux/actions/AircraftActions";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthReducer } from "../redux/reducers/auth/AuthReducer";
+import Pagination from "./Pagination";
 
 const Aircraft = () => {
   const history = useHistory();
@@ -35,7 +36,6 @@ const Aircraft = () => {
     setmodal(false);
   };
   const { AircraftReducer } = useSelector((state) => state);
-  console.log(AircraftReducer);
 
   const addAircraft = async (event) => {
     event.preventDefault();
@@ -76,33 +76,6 @@ const Aircraft = () => {
         });
       }
     }
-    // const response = await createAircraft(aircraftData, token, user._id);
-    // if (response) {
-    //   if (
-    //     response.message === "unAthurizedUser" ||
-    //     response.message === "invalid_token"
-    //   ) {
-    //     signout();
-    //     history.push("/signin");
-    //   }
-    //   console.log(response);
-    //   if (response.status === "ok") {
-    //     setSortByText("firstFetch");
-    //     fetchAllAircraft(sortByText, 1, limit);
-    //     toast.success("New Airpot Added", {
-    //       position: "top-center",
-    //     });
-
-    //     setAircraftData(() => {
-    //       return { aircraftId: "", aircraftNo: "", airline: "" };
-    //     });
-    //     closeModal();
-    //   } else {
-    //     toast.error(`${response.message}`, {
-    //       position: "top-center",
-    //     });
-    //   }
-    // }
   };
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -168,72 +141,73 @@ const Aircraft = () => {
     setSortByText(text);
     setCurrentPage(1);
   };
-  const calculateTotalNumberOFPages = (noOfRecord, limit) => {
-    return Math.ceil(noOfRecord / limit);
-  };
-  const Pagination = () => {
-    var arr = [];
-    for (
-      let index = 1;
-      index <= calculateTotalNumberOFPages(AircraftReducer.totalRecord, limit);
-      index++
-    ) {
-      arr.push(index);
-    }
-    if (AircraftReducer.totalRecord > limit) {
-      return (
-        <>
-          <div className="text-center mt-5">
-            {currentPage > 1 && (
-              <button
-                className="btn btn-danger"
-                onClick={() => {
-                  dispatch(aircraftFetchPending());
-                  fetchAllAircraft(sortByText, currentPage - 1, limit);
-                  setCurrentPage(currentPage - 1);
-                }}
-              >
-                prev
-              </button>
-            )}
-            {arr.map((data, index) => {
-              return (
-                <>
-                  <button
-                    className="btn btn-primary m-2"
-                    onClick={() => {
-                      dispatch(aircraftFetchPending());
-                      fetchAllAircraft(sortByText, data, limit);
-                      setCurrentPage(data);
-                    }}
-                  >
-                    {data}
-                  </button>
-                </>
-              );
-            })}
+  // const calculateTotalNumberOFPages = (noOfRecord, limit) => {
+  //   return Math.ceil(noOfRecord / limit);
+  // };
+  // const Pagination = () => {
+  //   var arr = [];
+  //   for (
+  //     let index = 1;
+  //     index <= calculateTotalNumberOFPages(AircraftReducer.totalRecord, limit);
+  //     index++
+  //   ) {
+  //     arr.push(index);
+  //   }
+  //   if (AircraftReducer.totalRecord > limit) {
+  //     return (
+  //       <>
+  //         <div className="text-center mt-5">
+  //           {currentPage > 1 && (
+  //             <button
+  //               className="btn btn-danger"
+  //               onClick={() => {
+  //                 dispatch(aircraftFetchPending());
+  //                 fetchAllAircraft(sortByText, currentPage - 1, limit);
+  //                 setCurrentPage(currentPage - 1);
+  //               }}
+  //             >
+  //               prev
+  //             </button>
+  //           )}
+  //           {arr.map((data, index) => {
+  //             return (
+  //               <>
+  //                 <button
+  //                   className="btn btn-primary m-2"
+  //                   onClick={() => {
+  //                     dispatch(aircraftFetchPending());
+  //                     fetchAllAircraft(sortByText, data, limit);
+  //                     setCurrentPage(data);
+  //                   }}
+  //                 >
+  //                   {data}
+  //                 </button>
+  //               </>
+  //             );
+  //           })}
 
-            {calculateTotalNumberOFPages(AircraftReducer.totalRecord, limit) >
-              currentPage && (
-              <button
-                className="btn btn-success"
-                onClick={() => {
-                  dispatch(aircraftFetchPending());
-                  fetchAllAircraft(sortByText, currentPage + 1, limit);
-                  setCurrentPage(currentPage + 1);
-                }}
-              >
-                next
-              </button>
-            )}
-          </div>
-        </>
-      );
-    }
-  };
+  //           {calculateTotalNumberOFPages(AircraftReducer.totalRecord, limit) >
+  //             currentPage && (
+  //             <button
+  //               className="btn btn-success"
+  //               onClick={() => {
+  //                 dispatch(aircraftFetchPending());
+  //                 fetchAllAircraft(sortByText, currentPage + 1, limit);
+  //                 setCurrentPage(currentPage + 1);
+  //               }}
+  //             >
+  //               next
+  //             </button>
+  //           )}
+  //         </div>
+  //       </>
+  //     );
+  //   }
+  // };
   return (
     <>
       <Menu />
+      jfjorj
       <ToastContainer autoClose={2000} />
       {modal && (
         <div className="aiportModal" style={{ display: modal }}>
@@ -352,7 +326,17 @@ const Aircraft = () => {
               {AircraftReducer.aircraft.length < 1 && (
                 <div className="text-center text-danger">No Aircraft Found</div>
               )}
-              {Pagination()}
+              {/* {Pagination()} */}
+              {AircraftReducer.totalRecord > limit && (
+                <Pagination
+                  AircraftReducer={AircraftReducer}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  fetchAllAircraft={fetchAllAircraft}
+                  limit={limit}
+                  sortByText={sortByText}
+                />
+              )}
             </div>
           </div>
         </div>

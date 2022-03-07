@@ -5,6 +5,7 @@ import { AuthConstants } from "../../constants/auth/AuthConstants";
 export const addUser = (userData) => {
   return async (dispatch) => {
     const response = await UserSignup(userData);
+    console.log(response);
     dispatch({
       type: AuthConstants.ADD_USER,
       payload: {

@@ -236,7 +236,7 @@ const Transaction = () => {
 
                 <select required name="airportId" onChange={handleChange}>
                   <option disabled selected>
-                    select AirPort
+                    select Airport
                   </option>
                   {AirportReducer.allAirport.map((data, index) => {
                     return (
@@ -255,7 +255,7 @@ const Transaction = () => {
                     {AircraftReducer.allAircraft.map((data, index) => {
                       return (
                         <>
-                          <option value={data._id}>{data.airline}</option>
+                          <option value={data._id}>{data.aircraftNo}</option>
                         </>
                       );
                     })}
@@ -305,7 +305,7 @@ const Transaction = () => {
           <div className="row ">
             <div className="col-lg-4 d-flex   justify-content-center justify-content-lg-start ">
               <button className="btn btn-primary  " onClick={openModal}>
-                create Transaction
+                Create Transaction
               </button>
             </div>
             <div className="col-lg-4 sortBy d-flex   justify-content-center justify-content-lg-center">

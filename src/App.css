@@ -39,7 +39,7 @@
 /* custom styles */
 body {
   color: #fff;
-  background: #19aa8d;
+  background: rgb(237, 242, 250) !important;
   font-family: "Roboto", sans-serif;
 }
 .form-control {

@@ -26,7 +26,7 @@ const ShowTransaction = ({ data }) => {
         <td>{new Date(data.createdAt).toLocaleString()}</td>
         <td>
           {data.aircraftId !== null ? (
-            data.aircraftId.airline
+            data.aircraftId.aircraftNo
           ) : (
             <div className="text-danger">Airline Not Available</div>
           )}

@@ -351,7 +351,7 @@ const AddAirport = () => {
               {AirportReducer.airports.length < 1 && (
                 <div className="text-center text-danger">No Airport Found</div>
               )}
-              {Pagination()}
+              {Pagination()};
             </div>
           </div>
         </div>
